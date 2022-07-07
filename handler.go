@@ -80,6 +80,7 @@ func SplitHandler(w http.ResponseWriter, r *http.Request) {
 	response.ID = request.ID
 	response.Balance = tracker.Balance
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Println(err)
