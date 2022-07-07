@@ -22,16 +22,16 @@ func SplitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	splitinfo := request.SplitInfo
-	SortSplitInfoSlice(splitinfo)
+	splitInfo := request.SplitInfo
+	SortSplitInfoSlice(splitInfo)
 
-	if len(splitinfo) > 20 {
-		splitinfo = splitinfo[:20]
+	if len(splitInfo) > 20 {
+		splitInfo = splitInfo[:20]
 	}
-	response.SplitBreakDown = make([]SplitBreakDown, len(splitinfo))
+	response.SplitBreakDown = make([]SplitBreakDown, len(splitInfo))
 	tracker := new(BalanceTracker)
 	tracker.Balance = request.Amount
-	for index, info := range splitinfo {
+	for index, info := range splitInfo {
 		switch info.SplitType {
 		case "FLAT":
 			tracker.Balance -= info.SplitValue
@@ -51,7 +51,7 @@ func SplitHandler(w http.ResponseWriter, r *http.Request) {
 			if !tracker.RatioOpenBalance.Set {
 				tracker.RatioOpenBalance.Balance = tracker.Balance
 				tracker.RatioOpenBalance.Set = true
-				tracker.RatioOpenBalance.Total = GetNumRatio(splitinfo)
+				tracker.RatioOpenBalance.Total = GetNumRatio(splitInfo)
 			}
 
 			ratio := info.SplitValue / tracker.RatioOpenBalance.Total
